@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ImgCarousel } from 'src/app/interfaces/img-carousel';
 import { CarouselService } from 'src/app/services/carousel.service';
+import { CityDialogComponent } from '../city-dialog/city-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-main',
@@ -10,11 +12,24 @@ import { CarouselService } from 'src/app/services/carousel.service';
 export class MainComponent implements OnInit{
   imgCarousel: ImgCarousel[] = [];
 
-  constructor(private carouselService: CarouselService)
+  constructor(private carouselService: CarouselService, private dialog: MatDialog)
   {}
-  ngOnInit(): void {
-    const carousel = this.carouselService.getCarouselData();
-    console.log('carousel', carousel);
+  async ngOnInit(): Promise<void> {
+    this.imgCarousel = await this.carouselService.getCarouselData();
+    console.log('carousel', this.imgCarousel);
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(CityDialogComponent, {
+      width: '300px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // console.log('Données du dialogue fermé :', result);
+        this.carouselService.add(result);
+      }
+    });
   }
 
 }
