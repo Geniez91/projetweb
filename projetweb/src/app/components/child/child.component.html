@@ -1,0 +1,15 @@
+<div class="carousel">
+  <div *ngFor="let item of city" class="carousel-item">
+    <mat-card class="example-card" >
+      <mat-card-header>
+        <div mat-card-avatar></div>
+        <mat-card-title>{{ item.id }}</mat-card-title>
+      </mat-card-header>
+      <img mat-card-image [src]="item.img" alt="Image {{ item.id }}">
+      <mat-card-actions>
+        <button mat-button (click)="sendItemUpdate(item)">Modifier</button>
+        <button mat-button (click)="deleteItem(item)">Supprimer</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
