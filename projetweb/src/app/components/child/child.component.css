@@ -25,6 +25,7 @@
 .example-card {
   width: 100%;
   max-width: 300px;
+  box-shadow: 5px 5px 5px 5px lightgray;
 }
 
 
