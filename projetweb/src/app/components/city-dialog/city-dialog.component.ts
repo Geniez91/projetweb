@@ -26,7 +26,7 @@ export class CityDialogComponent {
       this.cityForm.setValue({
         cityName: this.data.id,
         imageUrl: this.data.img,
-        likes: this.data.likes
+        like: this.data.likes
       });
     }
   }

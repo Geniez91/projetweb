@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs, setDoc, doc, updateDoc, deleteDoc, getDoc } from 'firebase/firestore';
+import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, setDoc, getDoc } from 'firebase/firestore';
+import { Observable } from 'rxjs';
+
 import { firebaseConfig } from '../environnements/environment';
 import { ImgCarousel } from '../interfaces/img-carousel';
 
@@ -16,24 +18,27 @@ export class CarouselService {
     this.db = getFirestore(this.app);
   }
 
-  async getCarouselData() : Promise<any[]> {
+  getCarouselData(): Observable<any[]> {
     const carouselRef = collection(this.db, 'carousel');
 
-    try {
-      const querySnapshot = await getDocs(carouselRef);
-      const carouselData: any[] = [];
+    return new Observable<any[]>((observer) => {
+      const unsubscribe = onSnapshot(carouselRef, (querySnapshot) => {
+        const carouselData: any[] = [];
 
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        data['id'] = doc.id;
-        carouselData.push(data);
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          data['id'] = doc.id;
+          carouselData.push(data);
+        });
+
+        observer.next(carouselData);
       });
 
-      return carouselData;
-    } catch (error) {
-      throw error;
-    }
+      return unsubscribe;
+    });
   }
+
+
 
   async add(city: any): Promise<void> {
     const carouselRef = collection(this.db, 'carousel');
@@ -68,7 +73,6 @@ export class CarouselService {
       throw error;
     }
   }
-
   async downloadImage(item: ImgCarousel) {
     const image = await fetch(item.img);
     const imageBlob = await image.blob();
@@ -84,20 +88,16 @@ export class CarouselService {
 
   async updateLikes(item: ImgCarousel) {
     try {
-      // Récupérez une référence au document que vous souhaitez mettre à jour dans Firestore.
       const itemRef = doc(this.db, `carousel/${item.id}`);
-  
-      // Récupérez les données actuelles du document.
+
       const snapshot = await getDoc(itemRef);
       const itemData = snapshot.data();
-  
-      // Mettez à jour le nombre de likes de l'élément.
+
       const updatedLikes = itemData?.['likes'] + 1;
-  
-      // Mettez à jour les données de l'élément dans Firestore.
+
       await updateDoc(itemRef, { likes: updatedLikes });
     } catch (error) {
       throw error;
     }
-  }  
+  }
 }
