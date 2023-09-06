@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs, setDoc, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, setDoc, doc, updateDoc, deleteDoc, getDoc } from 'firebase/firestore';
 import { firebaseConfig } from '../environnements/environment';
 import { ImgCarousel } from '../interfaces/img-carousel';
 
@@ -82,4 +82,22 @@ export class CarouselService {
     document.body.removeChild(link);
   }
 
+  async updateLikes(item: ImgCarousel) {
+    try {
+      // Récupérez une référence au document que vous souhaitez mettre à jour dans Firestore.
+      const itemRef = doc(this.db, `carousel/${item.id}`);
+  
+      // Récupérez les données actuelles du document.
+      const snapshot = await getDoc(itemRef);
+      const itemData = snapshot.data();
+  
+      // Mettez à jour le nombre de likes de l'élément.
+      const updatedLikes = itemData?.['likes'] + 1;
+  
+      // Mettez à jour les données de l'élément dans Firestore.
+      await updateDoc(itemRef, { likes: updatedLikes });
+    } catch (error) {
+      throw error;
+    }
+  }  
 }

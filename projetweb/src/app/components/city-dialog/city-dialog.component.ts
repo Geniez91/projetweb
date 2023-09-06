@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -18,6 +18,7 @@ export class CityDialogComponent {
     this.cityForm = this.fb.group({
       cityName: ['', Validators.required],
       imageUrl: ['', Validators.required],
+      like: 0
     });
 
     if (data) {
@@ -25,6 +26,7 @@ export class CityDialogComponent {
       this.cityForm.setValue({
         cityName: this.data.id,
         imageUrl: this.data.img,
+        likes: this.data.likes
       });
     }
   }
@@ -33,10 +35,17 @@ export class CityDialogComponent {
     if (this.cityForm.valid) {
       const cityName = this.cityForm.get('cityName')?.value;
       const imageUrl = this.cityForm.get('imageUrl')?.value;
+      const like = this.cityForm.get('like')?.value;
 
-      const cityData = { id: cityName, img: imageUrl };
+      const cityData = { id: cityName, img: imageUrl, likes: like };
 
       this.dialogRef?.close(cityData);
+    }
+  }
+
+  onClose(): void {
+    if (this.cityForm) {
+    this.dialogRef?.close();
     }
   }
 }

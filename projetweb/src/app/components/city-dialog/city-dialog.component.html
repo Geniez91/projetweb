@@ -13,6 +13,6 @@
   </form>
 </div>
 <div mat-dialog-actions>
-  <button mat-button>No Thanks</button>
+  <button mat-button (click)="onClose()">No Thanks</button>
   <button mat-button cdkFocusInitial (click)="onSubmit()">Ok</button>
 </div>

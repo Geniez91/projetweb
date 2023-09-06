@@ -39,6 +39,10 @@ export class ChildComponent {
   }
 
   downloadImage(item: ImgCarousel) {
-    this.carouselService.downloadImage(item)
+    this.carouselService.downloadImage(item);
+  }
+
+  updateLikes(item: any) {
+    this.carouselService.updateLikes(item);
   }
 }
