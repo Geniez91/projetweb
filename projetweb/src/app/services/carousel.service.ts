@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs, setDoc, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { firebaseConfig } from '../environnements/environment';
+import { ImgCarousel } from '../interfaces/img-carousel';
 
 @Injectable({
   providedIn: 'root',
@@ -66,6 +67,19 @@ export class CarouselService {
     } catch (error) {
       throw error;
     }
+  }
+
+  async downloadImage(item: ImgCarousel) {
+    const image = await fetch(item.img);
+    const imageBlob = await image.blob();
+    const imageURL = URL.createObjectURL(imageBlob);
+
+    const link = document.createElement('a');
+    link.href = imageURL;
+    link.download = `image_${item.id}.jpg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 
 }

@@ -13,7 +13,7 @@ export class ChildComponent {
   constructor(
     private dialog: MatDialog,
     private carouselService: CarouselService
-  ) {}
+  ) { }
 
   @Input() city?: ImgCarousel[] = [];
 
@@ -36,5 +36,9 @@ export class ChildComponent {
 
   deleteItem(item: any) {
     this.carouselService.delete(item);
+  }
+
+  downloadImage(item: ImgCarousel) {
+    this.carouselService.downloadImage(item)
   }
 }
