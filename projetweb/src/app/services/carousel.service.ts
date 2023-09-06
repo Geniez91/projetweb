@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs, addDoc, setDoc, doc } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, setDoc, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { firebaseConfig } from '../environnements/environment';
 
 @Injectable({
@@ -41,6 +41,28 @@ export class CarouselService {
     try {
       await setDoc(cityDocRef, city);
       console.log(city);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async update(updatedData: any): Promise<void> {
+    const carouselRef = collection(this.db, 'carousel');
+    const cityDoc = doc(carouselRef, updatedData.id);
+
+    try {
+      await updateDoc(cityDoc, updatedData);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async delete(item: any): Promise<void> {
+    const carouselRef = collection(this.db, 'carousel');
+    const cityDoc = doc(carouselRef, item.id);
+
+    try {
+      await deleteDoc(cityDoc);
     } catch (error) {
       throw error;
     }

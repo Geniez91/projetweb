@@ -7,7 +7,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   templateUrl: './city-dialog.component.html',
 })
 export class CityDialogComponent {
-  cityForm: FormGroup;
+  public cityForm: FormGroup;
+  public isUpdate: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<CityDialogComponent>,
@@ -18,6 +19,14 @@ export class CityDialogComponent {
       cityName: ['', Validators.required],
       imageUrl: ['', Validators.required],
     });
+
+    if (data) {
+      this.isUpdate = true;
+      this.cityForm.setValue({
+        cityName: this.data.id,
+        imageUrl: this.data.img,
+      });
+    }
   }
 
   onSubmit(): void {

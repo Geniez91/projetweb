@@ -1,7 +1,7 @@
-<h1 mat-dialog-title>Ajouter une ville</h1>
+<h1 mat-dialog-title>{{ isUpdate ? 'Modifier une ville' : 'Ajouter une ville' }}</h1>
 <div mat-dialog-content>
   <form [formGroup]="cityForm">
-    <mat-form-field>
+    <mat-form-field *ngIf="!isUpdate">
       <mat-label>Nom de la ville</mat-label>
       <input matInput formControlName="cityName">
     </mat-form-field>
