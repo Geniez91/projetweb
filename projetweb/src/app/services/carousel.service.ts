@@ -39,7 +39,8 @@ export class CarouselService {
     const cityDocRef = doc(carouselRef, city.id);
 
     try {
-      await setDoc(cityDocRef, city.img);
+      await setDoc(cityDocRef, city);
+      console.log(city);
     } catch (error) {
       throw error;
     }
